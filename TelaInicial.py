@@ -13,7 +13,7 @@ class MinhaJanela(QWidget):
         self.label.setGeometry(50, 50, 200, 30)  # Posição (x=50, y=50) e tamanho (200x30)
 
         # Botão
-        self.botao = QPushButton("Clique aqui", self)
+        self.botao = QPushButton("Clicaa", self)
         self.botao.setGeometry(50, 100, 120, 40)  # Posição (x=50, y=100) e tamanho (120x40)
         self.botao.clicked.connect(self.ao_clicar)
 
