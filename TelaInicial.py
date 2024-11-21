@@ -472,6 +472,16 @@ class JanelaPrincipal(QWidget):
             border-radius: 10px;               
         """)
         self.botaoCompras.clicked.connect(lambda: mudar_tela_callback("compras"))
+        # Clientes
+        self.botaoClientes = QPushButton("Clientes", self)
+        self.botaoClientes.setGeometry(-10, 390, 150, 80)  
+        self.botaoClientes.setStyleSheet("""
+            color: white;                     
+            background-color: darkblue;      
+            border: 2px solid white;          
+            border-radius: 10px;               
+        """)
+        self.botaoClientes.clicked.connect(lambda: mudar_tela_callback("cliente"))
         # Gerenciador de Vendas
         self.botaoGVendas = QPushButton("Gerenciador de Vendas", self)
         self.botaoGVendas.setGeometry(220, 180, 150, 80)  
