@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QLabel, QPushButton, QWidget, QVBoxLayout, QStackedWidget, QLineEdit
+from PyQt5.QtWidgets import QApplication, QLabel, QPushButton, QWidget, QVBoxLayout, QStackedWidget, QLineEdit, QComboBox, QMessageBox
 
 # Tela de Fornecedor
 class TelaFornecedor(QWidget):
@@ -352,73 +352,150 @@ class TelaProduto(QWidget):
 class TelaCadastrarProduto(QWidget):
     def __init__(self, mudar_tela_callback):
         super().__init__()
+
+        # Configuração geral
+        self.setWindowTitle("Cadastrar Produto")
+        self.setGeometry(100, 100, 800, 600)
+
+        # Lista de categorias (substituir por consulta ao banco no futuro)
+        self.categorias = ["Eletrônicos", "Alimentos", "Roupas", "Livros"]
+
+        # Layout principal
         layout = QVBoxLayout()
-        
-        
-        self.botaoLayoutProdutos = QPushButton("Produtos", self)
-        self.botaoLayoutProdutos.setGeometry(260, -5, 300, 30)  
-        self.botaoLayoutProdutos.setStyleSheet("""
-            color: white;                     
-            background-color: darkblue;      
-            border: 2px solid black;          
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: bold;               
-        """) 
 
-        # Gerenciador de Produtos
-        self.botaoAProdutos = QPushButton(self)
-        self.botaoAProdutos.setGeometry(200, 50, 400, 400)  
-        self.botaoAProdutos.setStyleSheet("""
-            color: white;                     
-            background-color: darkblue;      
-            border: 2px solid white;          
-            border-radius: 10px;               
-        """)
-        
-        # Botão
-        self.botaoAProdutos = QPushButton(self)
-        self.botaoAProdutos.setText("Adicionar Produto")  # Adiciona um texto ao botão
-        self.botaoAProdutos.setGeometry(220, 80, 300, 20)  
-        self.botaoAProdutos.setStyleSheet("""
-            color: white;                     
-            background-color: grey;      
-            border: 2px solid white;          
-            border-radius: 10px;               
-        """)
-
-        # Campo de texto
-        self.campo_texto = QLineEdit(self) 
-        self.campo_texto.setGeometry(220, 110, 300, 30) 
-        self.campo_texto.setPlaceholderText("Digite o nome do produto")  
-        self.campo_texto.setStyleSheet("""
+        # Campo para nome do produto
+        self.campo_texto_add_produto = QLineEdit(self)
+        self.campo_texto_add_produto.setPlaceholderText("Digite o nome do produto")
+        self.campo_texto_add_produto.setStyleSheet("""
             border: 1px solid grey;
             border-radius: 5px;
             padding: 5px;
+            font-size: 12px;
         """)
-        
+        layout.addWidget(self.campo_texto_add_produto)
 
-        self.botao_salvar = QPushButton("Salvar")
-        
+        # Campo para código de barras
+        self.campo_texto_add_codigo_barras = QLineEdit(self)
+        self.campo_texto_add_codigo_barras.setPlaceholderText("Digite o código de barras")
+        self.campo_texto_add_codigo_barras.setStyleSheet("""
+            border: 1px solid grey;
+            border-radius: 5px;
+            padding: 5px;
+            font-size: 12px;
+        """)
+        layout.addWidget(self.campo_texto_add_codigo_barras)
 
-        self.botao_voltar = QPushButton("Voltar para \nTela de Produtos", self)
+        # Campo para preço
+        self.campo_texto_add_preco = QLineEdit(self)
+        self.campo_texto_add_preco.setPlaceholderText("Digite o preço")
+        self.campo_texto_add_preco.setStyleSheet("""
+            border: 1px solid grey;
+            border-radius: 5px;
+            padding: 5px;
+            font-size: 12px;
+        """)
+        layout.addWidget(self.campo_texto_add_preco)
+
+        # Campo para quantidade
+        self.campo_texto_add_quantidade = QLineEdit(self)
+        self.campo_texto_add_quantidade.setPlaceholderText("Digite a quantidade")
+        self.campo_texto_add_quantidade.setStyleSheet("""
+            border: 1px solid grey;
+            border-radius: 5px;
+            padding: 5px;
+            font-size: 12px;
+        """)
+        layout.addWidget(self.campo_texto_add_quantidade)
+
+        # Caixa de seleção para categoria
+        self.campo_texto_add_categoria = QComboBox(self)
+        self.campo_texto_add_categoria.addItems(self.categorias)
+        self.campo_texto_add_categoria.setStyleSheet("""
+            border: 1px solid grey;
+            border-radius: 5px;
+            padding: 5px;
+            font-size: 12px;
+        """)
+        layout.addWidget(self.campo_texto_add_categoria)
+
+        # Botão para salvar
+        self.botao_salvar = QPushButton("Salvar", self)
+        self.botao_salvar.setGeometry(200, 300, 100, 40)  
+        self.botao_salvar.setStyleSheet("""
+            color: white;
+            background-color: blue;
+            border: 2px solid black;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        """)
+
+        self.botao_salvar.clicked.connect(self.salvar_dados)
+        layout.addWidget(self.botao_salvar)
+
+        # Botão para voltar
+        self.botao_voltar = QPushButton("Voltar para Tela de Produtos", self)
         self.botao_voltar.setStyleSheet("""
-            color: white;                     
-            background-color: gray;      
-            border: 2px solid black;          
-            border-radius: 10px;               
-            font-size: 14px;  
+            color: white;
+            background-color: gray;
+            border: 2px solid black;
+            border-radius: 10px;
+            font-size: 14px;
         """)
-        self.botao_voltar.setFixedSize(180, 60)  
-
-        layout.addStretch()  
-        
-
         self.botao_voltar.clicked.connect(lambda: mudar_tela_callback("VoltarInicialProdutos"))
         layout.addWidget(self.botao_voltar)
 
-
+        # Aplicar layout
         self.setLayout(layout)
+
+    def salvar_dados(self):
+        # Coletar os dados dos campos
+        produto = self.campo_texto_add_produto.text()
+        codigo_barras = self.campo_texto_add_codigo_barras.text()
+        preco = self.campo_texto_add_preco.text()
+        quantidade = self.campo_texto_add_quantidade.text()
+        categoria = self.campo_texto_add_categoria.currentText()
+
+        # Exibir mensagem com os dados coletados
+        # QMessageBox.information(
+        #     self,
+        #     "Dados Salvos",
+        #     f"Produto: {produto}\n"
+        #     f"Código de Barras: {codigo_barras}\n"
+        #     f"Preço: {preco}\n"
+        #     f"Quantidade: {quantidade}\n"
+        #     f"Categoria: {categoria}"
+        # )
+        
+class ListarProduto(QWidget):
+    def __init__(self, mudar_tela_callback):
+        super().__init__()
+
+        # Configuração geral
+        self.setWindowTitle("Listar Produto")
+        self.setGeometry(100, 100, 800, 600)
+
+        # Layout principal
+        layout = QVBoxLayout()
+
+        # Botão para voltar
+        self.botao_voltar = QPushButton("Voltar para Tela de Produtos", self)
+        self.botao_voltar.setStyleSheet("""
+            color: white;
+            background-color: gray;
+            border: 2px solid black;
+            border-radius: 10px;
+            font-size: 14px;
+        """)
+        self.botao_voltar.clicked.connect(lambda: mudar_tela_callback("VoltarInicialProdutos"))
+        layout.addWidget(self.botao_voltar)
+
+        # Aplicar layout
+        self.setLayout(layout)
+
+
+
+        
 # Tela Inicial
 class JanelaPrincipal(QWidget):
     def __init__(self, mudar_tela_callback):
